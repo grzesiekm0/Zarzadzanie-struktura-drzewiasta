@@ -1,0 +1,90 @@
+﻿@model TaskManager.Models.TreeviewModel
+
+@{
+    ViewData["Title"] = "GetTree";
+}
+
+<div class="row">
+    <div class="col">
+        <form id="moveFrom" name="moveFormm" onsubmit="return validateform()">
+            <div class="mb-3">
+                <label class="form-label text-primary h5">Obecny węzeł</label>
+                <input type="text" id="currentNodeName" name="currentNodeName" menuId="" class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="text-primary h5">Nowy rodzic węzła</label>
+                <select multiple class="form-control" id="newParent" name="selectNode">
+                    <option pid="0">Główny</option>
+                    @{ if (Model.GetTreeFormViews != null && Model.GetTreeFormViews.Count() > 0)
+                        {
+                            @foreach (var i in Model.GetTreeFormViews)
+                            {
+                                <option pid="@i.TreeId" parent="">@i.TreeName</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary moveNode">Przenieś węzeł</button>
+
+        </form>
+    </div>
+    <div class="col">
+        <form id="addForm">
+            <div class="mb-3">
+                <label class="form-label text-primary h5">Nazwa nowego węzła</label>
+                <input type="text" id="nodeName1" class="form-control">
+            </div>
+            <div class="form-group">
+                <label class="text-primary h5">Rodzic węzła</label>
+                <select multiple class="form-control" id="parent">
+                    <option pid="0">Główny</option>
+                    @{ if (Model.GetTreeFormViews != null && Model.GetTreeFormViews.Count() > 0)
+                        {
+                            @foreach (var i in Model.GetTreeFormViews)
+                            {
+                                <option pid="@i.TreeId">@i.TreeName</option>
+                            }
+                        }
+                    }
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary addNode float-left">Dodaj</button>
+            <button type="button" class="btn btnRefresh btn-warning float-right">Resetuj drzewo</button>
+
+        </form>
+    </div>
+    <div class="col">
+    </div>
+</div>
+
+
+
+<div style="border:1px solid black; padding:10px;  background-color:#FAFAFA">
+
+        <div class="treeview">
+            @{
+                if (Model.GetTreeview != null && Model.GetTreeview.Count() > 0)
+                {
+                    <ul>
+                        @foreach (var i in Model.GetTreeview)
+                        {
+                            <li>
+                                <span class="collapseNode collapsibleNode" data-loaded="false" pid="@i.TreeId">&nbsp;</span>
+                                <span class="item" menuId="@i.TreeId">
+                                    <a>@i.TreeName</a>
+                                </span>
+                            </li>
+                        }
+                    </ul>
+                }
+            }
+        </div>
+
+</div>
+
+@section Scripts{
+    <script src="/js/MyTreeview.js" asp-append-version="true"></script>
+}
